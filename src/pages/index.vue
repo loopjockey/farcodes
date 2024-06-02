@@ -32,33 +32,47 @@
               <v-icon icon="mdi-wallet" start></v-icon>
               +$10 Reward
             </v-chip>
+            <v-spacer></v-spacer>
+            <v-btn variant="text"> Go To → </v-btn>
           </v-card-actions>
         </v-card>
       </v-slide-group-item>
     </v-slide-group>
     <v-row>
       <v-col cols="2">
-        <v-sheet rounded="lg" style="position: sticky; top: 80px">
-          <v-list rounded="lg">
-            <v-list-subheader> Feeds </v-list-subheader>
-            <v-list-item
-              v-for="n in feedTypes"
-              :key="n"
-              :title="n.name"
-              :prepend-icon="n.icon"
-              link
-            ></v-list-item>
+        <div style="position: sticky; top: 80px">
+          <v-sheet rounded="lg">
+            <v-list rounded="lg">
+              <v-list-subheader> Feeds </v-list-subheader>
+              <v-list-item
+                v-for="n in feedTypes"
+                :key="n"
+                :title="n.name"
+                :prepend-icon="n.icon"
+                link
+              ></v-list-item>
 
-            <v-divider class="my-2"></v-divider>
+              <v-divider class="my-2"></v-divider>
 
-            <v-list-item
-              color="grey-lighten-4"
-              title="Refresh"
-              link
-              prepend-icon="mdi-refresh"
-            ></v-list-item>
-          </v-list>
-        </v-sheet>
+              <v-list-item
+                color="grey-lighten-4"
+                title="Refresh"
+                link
+                prepend-icon="mdi-refresh"
+              ></v-list-item>
+            </v-list>
+          </v-sheet>
+          <v-card class="mt-3" color="yellow" variant="tonal">
+            <v-card-title> Get Seen </v-card-title>
+            <v-card-text>
+              👑 Pay $2 to get your referral code bumped to the top of this
+              filter
+            </v-card-text>
+            <v-card-actions>
+              <v-btn variant="tonal" block>Bump me</v-btn>
+            </v-card-actions>
+          </v-card>
+        </div>
       </v-col>
 
       <v-col>
@@ -79,6 +93,7 @@
               <v-list-item
                 title="Guy Incognito posted referral for UpMoney"
                 subtitle="2 hours ago • 5 codes"
+                @click="isViewingCode = true"
               >
                 <template #prepend>
                   <v-avatar>
@@ -113,11 +128,58 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-dialog v-model="isViewingCode">
+    <v-card
+      class="mx-auto"
+      title="Guy Incognito x UpMoney"
+      subtitle="2 hours ago • 5 codes"
+      width="600"
+    >
+      <template #prepend>
+        <v-avatar>
+          <v-img
+            src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
+          ></v-img>
+        </v-avatar>
+        <v-avatar class="ml-1" rounded="lg">
+          <v-img
+            src="https://d2xqxjfvpb1oa6.cloudfront.net/eyJidWNrZXQiOiJpbnZpdGF0aW9udXBsb2FkcyIsImtleSI6Imludml0YXRpb24uYXBwLnVwLmNvbS5hdS1wcm9tby1jb2Rlc19lMmJiYWQuYXUiLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjI1NiwiaGVpZ2h0IjoyNTYsImZpdCI6ImNvbnRhaW4iLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9fX0="
+          ></v-img>
+        </v-avatar>
+      </template>
+      <template #append>
+        <v-btn flat icon @click="isViewingCode = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+      <v-card-text>
+        <v-list>
+          <v-list-item v-for="i in 5" :key="i">
+            <template #prepend>
+              {{ i }}. &nbsp;&nbsp;&nbsp;
+            </template>
+            <v-list-item-title>
+              <h1 class="bebas-neue-regular">D3H-342-243234-=24...</h1>
+            </v-list-item-title>
+            <template #append>
+              <v-btn icon flat>
+                <v-icon>mdi-content-copy</v-icon>
+              </v-btn>
+              <v-btn icon flat>
+                <v-icon>mdi-open-in-new</v-icon>
+              </v-btn>
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
 const model = ref([]);
+const isViewingCode = ref(false);
 const feedTypes = ref([
   { name: "Trending", icon: "mdi-fire" },
   { name: "Recent", icon: "mdi-clock" },
