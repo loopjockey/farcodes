@@ -2,7 +2,9 @@
   <v-app id="inspire">
     <v-app-bar flat color="background">
       <v-container class="mx-auto d-flex align-center justify-center">
-        <h1 class="bebas-neue-regular">FAR . CODES</h1>
+        <router-link to="/" class="site-title bebas-neue-regular">
+          FAR . CODES
+        </router-link>
 
         <v-spacer></v-spacer>
 
@@ -32,7 +34,8 @@
           ></template>
           <v-list>
             <v-list-item prepend-icon="mdi-chart-areaspline" title="Analytics"> </v-list-item>
-            <v-list-item title="My Profile"> </v-list-item>
+            <v-list-item prepend-icon="mdi-account-multiple" title="My Profile" to="/profile"> </v-list-item>
+            <v-list-item prepend-icon="mdi-logout" title="Logout"> </v-list-item>
           </v-list>
         </v-menu>
       </v-container>
@@ -54,5 +57,10 @@ const links = ref(["Feed", "Dashboard", "Programs"]);
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+.site-title {
+  color:white;
+  text-decoration: none;
+  font-size:40px
 }
 </style>
