@@ -15,3 +15,11 @@ These are the primary questions / use cases for the app:
 3. What are my friend's codes
 4. What are this person's codes
 
+## Pages
+
+In order of the questions to be answered
+
+1. Program discovery page
+2. Code management screen (view counts etc)
+3. Home screen (feed)
+4. Profile page
