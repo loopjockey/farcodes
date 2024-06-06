@@ -1,0 +1,15 @@
+{
+  "name": "far.codes.supabase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx supabase start",
+    "test": "npx supabase test db",
+    "db:reset" : "npx supabase db reset",
+    "functions:local" : "npx supabase functions serve --env-file ./supabase/.env.local",
+    "typegen": "npx supabase gen types typescript --local > ./supabase/functions/shared/models/database.types.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
