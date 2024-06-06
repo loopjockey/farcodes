@@ -12,7 +12,6 @@
 
         <v-responsive max-width="250">
           <v-text-field
-            density="compact"
             label="Search programs..."
             prepend-inner-icon="mdi-magnify"
             rounded="lg"
@@ -22,32 +21,61 @@
             single-line
           ></v-text-field>
         </v-responsive>
-        <v-btn class="ml-3" color="red" variant="tonal" to="/new/referral">
-          <v-icon start>mdi-plus</v-icon>
-          New Code
+        <template v-if="currentUser">
+          <v-btn
+            class="ml-3"
+            color="red"
+            size="x-large"
+            variant="tonal"
+            to="/new/referral"
+          >
+            <v-icon start>mdi-plus</v-icon>
+            New Code
+          </v-btn>
+          <v-menu location="bottom">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" icon class="ml-3">
+                <v-avatar  size="50" >
+                  <v-img
+                    src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
+                  ></v-img>
+                </v-avatar> </v-btn
+            ></template>
+            <v-list>
+              <v-list-item
+                prepend-icon="mdi-account-multiple"
+                title="My Profile"
+                :to="`/profile/${currentUser.fid}`"
+              >
+              </v-list-item>
+              <v-list-item
+                prepend-icon="mdi-chart-areaspline"
+                title="Analytics"
+              >
+              </v-list-item>
+
+              <v-list-item
+                prepend-icon="mdi-logout"
+                title="Logout"
+                @click="logout()"
+              >
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+        <v-btn
+          @click="login()"
+          size="large"
+          v-else
+          color="#855dcd"
+          variant="flat"
+          class="ml-3"
+        >
+          <v-avatar tile>
+            <v-img src="./assets/farcaster.svg"></v-img>
+          </v-avatar>
+          Login
         </v-btn>
-
-        <v-menu bottom left>
-          <template #activator="{ props }">
-            <v-avatar class="ml-3" v-bind="props">
-              <v-img
-                src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
-              ></v-img> </v-avatar
-          ></template>
-          <v-list>
-            <v-list-item
-              prepend-icon="mdi-account-multiple"
-              title="My Profile"
-              to="/profile/123"
-            >
-            </v-list-item>
-            <v-list-item prepend-icon="mdi-chart-areaspline" title="Analytics">
-            </v-list-item>
-
-            <v-list-item prepend-icon="mdi-logout" title="Logout">
-            </v-list-item>
-          </v-list>
-        </v-menu>
       </v-container>
     </v-app-bar>
 
@@ -58,8 +86,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-const links = ref(["Feed", "Dashboard", "Programs"]);
+import { useProfileStore, storeToRefs } from "./stores";
+const profileStore = useProfileStore();
+const { currentUser } = storeToRefs(profileStore);
+const { login, logout } = profileStore;
 </script>
 
 <style>
