@@ -12,11 +12,19 @@ export interface ISimpleFarcasterUser {
     avatarUrl: string;
 }
 
+export interface IHasCreator {
+    creator: ISimpleFarcasterUser;
+}
+
 export interface ISimpleProgram {
     id: string;
     name: string;
     avatarUrl: string;
     rewardDescription: string;
+}
+
+export interface IHasProgram {
+    program: ISimpleProgram;
 }
 
 export interface IProgram extends ISimpleProgram {

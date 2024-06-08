@@ -11,6 +11,7 @@ declare module 'vue' {
     FeedControls: typeof import('./src/components/FeedControls.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     NewReferralDialog: typeof import('./src/components/NewReferralDialog.vue')['default']
+    ProgramAutocomplete: typeof import('./src/components/ProgramAutocomplete.vue')['default']
     ProgramControls: typeof import('./src/components/ProgramControls.vue')['default']
     PromotionAd: typeof import('./src/components/PromotionAd.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

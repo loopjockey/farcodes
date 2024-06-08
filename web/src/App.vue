@@ -8,6 +8,9 @@
           FAR . CODES
         </router-link>
 
+        <router-link to="/" class="ml-8"> Home </router-link>
+        <router-link to="/about" class="ml-8"> About </router-link>
+
         <v-spacer></v-spacer>
 
         <v-responsive max-width="250">
@@ -16,26 +19,18 @@
             prepend-inner-icon="mdi-magnify"
             rounded="lg"
             variant="solo-filled"
+            density="compact"
             flat
             hide-details
             single-line
           ></v-text-field>
         </v-responsive>
         <template v-if="currentUser">
-          <v-btn
-            class="ml-3"
-            color="red"
-            size="x-large"
-            variant="tonal"
-            to="/new/referral"
-          >
-            <v-icon start>mdi-plus</v-icon>
-            New Code
-          </v-btn>
+          <NewReferralDialog v-model="isCreatingReferral" />
           <v-menu location="bottom">
             <template #activator="{ props }">
               <v-btn v-bind="props" icon class="ml-3">
-                <v-avatar  size="50" >
+                <v-avatar size="50" start>
                   <v-img
                     src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
                   ></v-img>
@@ -70,6 +65,7 @@
           color="#855dcd"
           variant="flat"
           class="ml-3"
+          rounded="lg"
         >
           <v-avatar tile>
             <v-img src="./assets/farcaster.svg"></v-img>
@@ -86,7 +82,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useProfileStore, storeToRefs } from "./stores";
+import { ref } from 'vue';
+import {  useProfileStore, storeToRefs } from "./stores";
+const isCreatingReferral = ref(false);
 const profileStore = useProfileStore();
 const { currentUser } = storeToRefs(profileStore);
 const { login, logout } = profileStore;
@@ -100,7 +98,10 @@ const { login, logout } = profileStore;
 }
 .site-title {
   color: white;
-  text-decoration: none;
   font-size: 40px;
+  font-style: italic
+}
+a {
+  text-decoration: none;
 }
 </style>

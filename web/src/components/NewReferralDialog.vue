@@ -1,9 +1,15 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="8">
-        <v-form class="pt-6">
-          <h2 class="mb-3 text-center">🎊 New Referral 🎊</h2>
+  <v-dialog v-model="model" scrollable max-width="600">
+    <template #activator="{ props }">
+      <v-btn color="red" variant="tonal" v-bind="props">
+        <v-icon start>mdi-plus</v-icon>
+        New Code
+      </v-btn>
+    </template>
+    <v-card color="background">
+      <v-card-title class="text-center py-4"> 🎊 New Referral 🎊 </v-card-title>
+      <v-card-text>
+        <v-form>
           <v-autocomplete
             variant="solo"
             prepend-inner-icon="mdi-magnify"
@@ -39,21 +45,23 @@
             v-model="referralReward"
           >
           </v-textarea>
-          <v-btn block>
-            <v-icon start> mdi-check </v-icon>
-            Submit
-          </v-btn>
         </v-form>
-      </v-col>
-      <v-col>
-        <v-sheet style="height: 100%" class="mt-4"> Howdy </v-sheet>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn block variant="flat" color="success">
+          <v-icon start>mdi-check</v-icon>
+          Submit Referral</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, defineModel } from "vue";
+import { ISimpleProgram } from '../models';
+import { DUMMY_PROGRAM } from '../models/dummy';
+const model = defineModel<Boolean>();
 const codes = ref<{ val: string }[]>([]);
 const addCode = () => codes.value.push({ val: "" });
 const removeCode = (i: number) => codes.value.splice(i, 1);
@@ -61,10 +69,3 @@ const referralReward = ref("$5");
 
 addCode();
 </script>
-
-<style scoped>
-.v-form {
-  max-width: 500px;
-  margin: auto;
-}
-</style>

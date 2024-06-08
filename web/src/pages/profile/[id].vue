@@ -1,6 +1,5 @@
 <template>
     <v-container>
-      <v-breadcrumbs :items="['Profiles', 'Some Guy']"></v-breadcrumbs>
       <v-card
         title="Some Guy"
         subtitle="Joined 2018 • 23 referral programs "
