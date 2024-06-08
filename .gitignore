@@ -22,3 +22,7 @@ pnpm-debug.log*
 *.sw?
 
 .env.development
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
