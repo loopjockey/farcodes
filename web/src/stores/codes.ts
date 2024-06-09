@@ -1,6 +1,6 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { ISimpleFarcasterUser, ISimpleCodeModel, ISimpleProgram, IProgram, FeedType } from '../models';
+import { ISimpleFarcasterUser, ISimpleCodeModel, ISimpleProgram, IProgram, FeedType, IHasCreator, IHasProgram } from '../models';
 import { useSupabase } from '../plugins/supabase';
 import { listTrendingPrograms, listCodesForFeed } from '../supabase'
 
@@ -8,7 +8,7 @@ export const useCodesStore = defineStore('codes', () => {
     const currentFeedType = ref<FeedType>(FeedType.trending);
     const userLookup = ref<{ [fid: number]: ISimpleFarcasterUser }>({});
     const programLookup = ref<{ [pid: string]: ISimpleProgram }>({});
-    const currentCodes = ref<ISimpleCodeModel[]>([]);
+    const currentCodes = ref<(ISimpleCodeModel & IHasCreator & IHasProgram)[]>([]);
     const trendingPrograms = ref<IProgram[]>([]);
 
     const isLoadingFeedCodes = ref(false);
@@ -23,10 +23,7 @@ export const useCodesStore = defineStore('codes', () => {
                     userLookup.value[c.postedByFid] = c.creator;
                 if (!programLookup.value[c.programId])
                     programLookup.value[c.programId] = c.program;
-                const y: any = c;
-                delete y.creator;
-                delete y.program;
-                currentCodes.value.push(y)
+                currentCodes.value.push(c)
             }
         } finally {
             isLoadingFeedCodes.value = false;
@@ -43,6 +40,11 @@ export const useCodesStore = defineStore('codes', () => {
             isLoadingTrendingPrograms.value = false;
         }
     }
+
+    tryLoadTrendingPrograms();
+    watch(() => currentFeedType.value, () => {
+        tryLoadCodesForCurrentFeed();
+    }, { immediate: true })
 
     return {
         userLookup,

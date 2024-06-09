@@ -41,7 +41,7 @@ export const listCodesForFeed = async (cli: ICli, feedType: FeedType) => {
                     creator: DUMMY_USER
                 }))
             )
-        });
+        }, 1000);
     });
 }
 

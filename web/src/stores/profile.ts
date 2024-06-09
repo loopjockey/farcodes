@@ -5,7 +5,7 @@ import { tryLogin } from '../lib/neynar';
 import { useSupabase, SupabaseConnection } from '../plugins/supabase';
 import { getUserByFid, listCodesForUser } from '../supabase'
 
-export const useProfileStore = defineStore('profile', async () => {
+export const useProfileStore = defineStore('profile', () => {
     const currentUser = ref<ISimpleFarcasterUser | null>(null);
     const myCodes = ref<(ISimpleCodeModel & IHasProgram)[]>([]);
 

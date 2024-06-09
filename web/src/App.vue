@@ -23,6 +23,7 @@
             flat
             hide-details
             single-line
+            class="mr-3"
           ></v-text-field>
         </v-responsive>
         <template v-if="currentUser">
@@ -59,12 +60,11 @@
           </v-menu>
         </template>
         <v-btn
+          v-else
           @click="login()"
           size="large"
-          v-else
           color="#855dcd"
           variant="flat"
-          class="ml-3"
           rounded="lg"
         >
           <v-avatar tile>
@@ -82,12 +82,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import {  useProfileStore, storeToRefs } from "./stores";
+import { ref } from "vue";
+import { useProfileStore, storeToRefs } from "./stores";
 const isCreatingReferral = ref(false);
 const profileStore = useProfileStore();
 const { currentUser } = storeToRefs(profileStore);
 const { login, logout } = profileStore;
+console.log(login);
 </script>
 
 <style>
@@ -99,7 +100,6 @@ const { login, logout } = profileStore;
 .site-title {
   color: white;
   font-size: 40px;
-  font-style: italic
 }
 a {
   text-decoration: none;

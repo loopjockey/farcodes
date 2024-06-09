@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <ProgramControls :items="trendingPrograms" />
+    <ProgramControls
+      :items="trendingPrograms"
+      :loading="isLoadingTrendingPrograms"
+    />
     <FeedControls v-if="!mdAndUp" type="tabs" v-model="currentFeedType" />
     <v-row>
       <v-col md="3" lg="2" v-if="mdAndUp">
@@ -14,10 +17,10 @@
 
       <v-col>
         <v-card
+          :title="cardTitle.t"
+          :subtitle="cardTitle.c"
           rounded="lg"
-          title="Trending Codes"
-          prepend-icon="mdi-fire"
-          subtitle="Recent codes from the hottest referral programs currently"
+          :prepend-icon="cardTitle.i"
         >
           <template #append>
             <v-btn variant="text">
@@ -25,29 +28,31 @@
               Refresh
             </v-btn>
           </template>
-          <v-list lines="two">
-            <template v-for="i in 20" :key="i">
+          <v-skeleton-loader
+            type="list-item-avatar-two-line@10"
+            v-if="isLoadingFeedCodes"
+          ></v-skeleton-loader>
+          <v-list lines="two" v-else>
+            <template v-for="code in currentCodes" :key="code.i">
               <v-list-item
-                title="Guy Incognito posted referral for UpMoney"
+                :title="`${code.creator.name} posted referral for ${code.program.name}`"
                 subtitle="2 hours ago • 5 codes"
                 @click="isViewingCode = true"
               >
                 <template #prepend>
                   <v-avatar>
-                    <v-img
-                      src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
-                    ></v-img>
+                    <v-img :src="code.creator.avatarUrl"></v-img>
                   </v-avatar>
                   <v-avatar class="ml-1" rounded="lg">
-                    <v-img
-                      src="https://d2xqxjfvpb1oa6.cloudfront.net/eyJidWNrZXQiOiJpbnZpdGF0aW9udXBsb2FkcyIsImtleSI6Imludml0YXRpb24uYXBwLnVwLmNvbS5hdS1wcm9tby1jb2Rlc19lMmJiYWQuYXUiLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjI1NiwiaGVpZ2h0IjoyNTYsImZpdCI6ImNvbnRhaW4iLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9fX0="
-                    ></v-img>
+                    <v-img :src="code.program.avatarUrl"></v-img>
                   </v-avatar>
                 </template>
                 <template #append>
                   <v-chip class="ma-2" color="red">
                     <v-icon icon="mdi-wallet" start></v-icon>
-                    +$10 Reward
+                    {{
+                      code.rewardDescription || code.program.rewardDescription
+                    }}
                   </v-chip>
                 </template>
               </v-list-item>
@@ -69,12 +74,60 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import PromotionAd from "../components/PromotionAd.vue";
-import { useCodesStore, useProfileStore, storeToRefs } from '../stores'
+import { useCodesStore, storeToRefs } from "../stores";
+import { FeedType } from "../models";
 const { mdAndUp } = useDisplay();
 const isViewingCode = ref(false);
 const codesStore = useCodesStore();
-const { currentFeedType, trendingPrograms } = storeToRefs(codesStore);
+const {
+  currentFeedType,
+  trendingPrograms,
+  currentCodes,
+  isLoadingTrendingPrograms,
+  isLoadingFeedCodes,
+} = storeToRefs(codesStore);
+
+const cardTitle = computed(() => {
+  switch (currentFeedType.value) {
+    case FeedType.trending:
+      return {
+        t: "Trending",
+        c: "The highest ranking posts from trending programs across the platform.",
+        i: "mdi-fire",
+      };
+    case FeedType.recent:
+      return {
+        t: "Recent",
+        c: "The most recent referral codes that have been posted.",
+        i: "mdi-clock",
+      };
+    case FeedType.mutuals:
+      return {
+        t: "Mutuals",
+        c: "Recent codes from all your mutual follows across farcaster.",
+        i: "mdi-heart",
+      };
+    case FeedType.following:
+      return {
+        t: "Following",
+        c: "Recent codes from all farcaster accounts you follow.",
+        i: "mdi-account-multiple",
+      };
+    case FeedType.mine:
+      return {
+        t: "Mine",
+        c: "All of your most recent posts.",
+        i: "mdi-account",
+      };
+    default:
+      return {
+        t: "Codes",
+        c: "The latest codes for this feed type",
+        i: "mdi-rss",
+      };
+  }
+});
 </script>
