@@ -54,6 +54,6 @@ export const listCodesForUser = async (cli: ICli, fid: number) => {
                     program: DUMMY_PROGRAM
                 }))
             )
-        });
+        }, 1000);
     });
 }

@@ -83,11 +83,11 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useProfileStore, storeToRefs } from "./stores";
+import { useAuthStore, storeToRefs } from "./stores";
 const isCreatingReferral = ref(false);
-const profileStore = useProfileStore();
-const { currentUser } = storeToRefs(profileStore);
-const { login, logout } = profileStore;
+const authStore = useAuthStore();
+const { currentUser } = storeToRefs(authStore);
+const { login, logout } = authStore;
 console.log(login);
 </script>
 
