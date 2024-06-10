@@ -29,6 +29,7 @@ export interface IHasProgram {
 
 export interface IProgram extends ISimpleProgram {
     description: string;
+    rewardConditions: string;
 }
 
 export interface ISimpleCodeModel {

@@ -33,6 +33,8 @@ export const useAuthStore = defineStore('auth', () => {
             isLoggingIn.value = true;
             const user = await tryLogin();
             const supabase = await useSupabase();
+            await supabase.receiveNeynarUser(user);
+            await supabase.connectWithSupabase();
             await tryLoadUser(supabase, user);
         } finally {
             isLoggingIn.value = false;

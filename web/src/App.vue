@@ -14,17 +14,7 @@
         <v-spacer></v-spacer>
 
         <v-responsive max-width="250">
-          <v-text-field
-            label="Search programs..."
-            prepend-inner-icon="mdi-magnify"
-            rounded="lg"
-            variant="solo-filled"
-            density="compact"
-            flat
-            hide-details
-            single-line
-            class="mr-3"
-          ></v-text-field>
+          <ProgramAutocomplete v-model="selectedProgram" rounded density="compact" hide-details variant="solo-filled" single-line/>
         </v-responsive>
         <template v-if="currentUser">
           <NewReferralDialog v-model="isCreatingReferral" />
@@ -88,7 +78,8 @@ const isCreatingReferral = ref(false);
 const authStore = useAuthStore();
 const { currentUser } = storeToRefs(authStore);
 const { login, logout } = authStore;
-console.log(login);
+const selectedProgram = ref<{ title:string, value:string } | null>(null);
+
 </script>
 
 <style>

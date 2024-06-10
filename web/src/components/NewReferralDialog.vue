@@ -10,11 +10,7 @@
       <v-card-title class="text-center py-4"> 🎊 New Referral 🎊 </v-card-title>
       <v-card-text>
         <v-form>
-          <v-autocomplete
-            variant="solo"
-            prepend-inner-icon="mdi-magnify"
-            label="Program Name"
-          ></v-autocomplete>
+          <ProgramAutocomplete v-model="searchedProgramId" variant="solo" :single-line="!!searchedProgramId"/>
           <v-text-field
             v-for="(t, i) in codes"
             :key="i"
@@ -59,9 +55,10 @@
 
 <script lang="ts" setup>
 import { ref, defineModel } from "vue";
-import { ISimpleProgram } from '../models';
-import { DUMMY_PROGRAM } from '../models/dummy';
+import { ISimpleProgram } from "../models";
+import { DUMMY_PROGRAM } from "../models/dummy";
 const model = defineModel<Boolean>();
+const searchedProgramId = ref<string | null>(null);
 const codes = ref<{ val: string }[]>([]);
 const addCode = () => codes.value.push({ val: "" });
 const removeCode = (i: number) => codes.value.splice(i, 1);
