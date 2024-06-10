@@ -9,3 +9,6 @@ export const setting_anon_key = () =>
 
 export const setting_supabase_url = () =>
     Deno.env.get('SUPABASE_URL') || '';
+
+export const setting_neynar_api_key = () =>
+    Deno.env.get('NEYNAR_API_KEY') || '';

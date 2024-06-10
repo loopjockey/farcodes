@@ -3,6 +3,7 @@ import { create } from "https://deno.land/x/djwt@v2.8/mod.ts"
 import { setting_jwt_secret } from "../shared/settings.ts";
 import { secretToKey } from "../shared/crypto.ts";
 import { createSupabaseForServiceRole } from "./supabase.ts";
+import { Database } from "../shared/models/database.types.ts";
 const jwt_secret = setting_jwt_secret();
 
 export interface IJwtResult {
@@ -15,20 +16,10 @@ export interface IError {
     message: string;
 }
 
-export const create_jwt_for_fid = async (fid:number, type:string, exp:number) : Promise<[IJwtResult|null,IError|null]> => {
+export const create_jwt_for_fid = async (user:Database["public"]["Tables"]["user_profile"]["Row"], type:string, exp:number) : Promise<[IJwtResult|null,IError|null]> => {
     try {
       const supabase = createSupabaseForServiceRole();
       
-      const matching = await supabase
-        .from('user_profile')
-        .select('*')
-        .eq('fid', fid);
-  
-      if (!matching.data || !matching.data.length) {
-        return [null, {code:401, message:"Unauthorized."}];
-      }
-      const user = matching.data[0];
-
       const authUserResult = await supabase.auth.admin.getUserById(user.id);
       if (!authUserResult.data || !authUserResult.data.user) {
         return [null, {code:401, message:"Unauthorized."}];
