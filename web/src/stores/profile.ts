@@ -1,63 +1,36 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { ISimpleFarcasterUser, ISimpleCodeModel, IAuthenticatedUser, IHasProgram } from '../models';
-import { tryLogin } from '../lib/neynar';
-import { useSupabase, SupabaseConnection } from '../plugins/supabase';
+import { ISimpleFarcasterUser, ISimpleCodeModel, IHasProgram } from '../models';
+import { useSupabase } from '../plugins/supabase';
 import { getUserByFid, listCodesForUser } from '../supabase'
 
-export const useProfileStore = defineStore('profile', async () => {
-    const currentUser = ref<ISimpleFarcasterUser | null>(null);
-    const myCodes = ref<(ISimpleCodeModel & IHasProgram)[]>([]);
+export const useProfileStore = defineStore('profile', () => {
+    const targetUserFid = ref<number | null>(null);
+    const profileUser = ref<ISimpleFarcasterUser | null>(null);
+    const profileCodes = ref<(ISimpleCodeModel & IHasProgram)[]>([]);
 
-    const tryLoadUser = async (supabase: SupabaseConnection, user: IAuthenticatedUser | undefined | null) => {
-        if (!user) {
-            currentUser.value = null;
-        } else {
-            const [u, c] = await Promise.all([
-                getUserByFid(supabase, user.fid),
-                listCodesForUser(supabase, user.fid)
-            ])
-            currentUser.value = u;
-            myCodes.value = c;
-        }
-    }
-
-    const isLoadingCurrentUser = ref(false);
-    const tryLoadCurrentUser = async () => {
+    const isLoadingProfileData = ref(false);
+    const tryLoadProfileData = async (fid: number | null) => {
         try {
-            isLoadingCurrentUser.value = true;
-            const supabase = await useSupabase();
-            await tryLoadUser(supabase, supabase.currentUser);
+            isLoadingProfileData.value = true;
+            if (fid === null) {
+                profileCodes.value = [];
+                profileUser.value = null;
+            } else {
+                const supabase = await useSupabase();
+                const [u, c] = await Promise.all([
+                    getUserByFid(supabase, fid),
+                    listCodesForUser(supabase, fid)
+                ])
+                profileUser.value = u;
+                profileCodes.value = c;
+            }
         } finally {
-            isLoadingCurrentUser.value = false;
+            isLoadingProfileData.value = false;
         }
     }
 
-    const isLoggingIn = ref(false);
-    const login = async () => {
-        try {
-            isLoggingIn.value = true;
-            const user = await tryLogin();
-            const supabase = await useSupabase();
-            await tryLoadUser(supabase, user);
-        } finally {
-            isLoggingIn.value = false;
-        }
-    }
+    watch(() => targetUserFid.value, () => tryLoadProfileData(targetUserFid.value), { immediate: true });
 
-    const isLoggingOut = ref(false);
-    const logout = async () => {
-        try {
-            isLoggingIn.value = true;
-            const supabase = await useSupabase();
-            await supabase.clearState();
-            await tryLoadUser(supabase, null);
-        } finally {
-            isLoggingOut.value = false;
-        }
-    }
-
-    tryLoadCurrentUser();
-
-    return { currentUser, myCodes, login, logout, isLoadingCurrentUser, isLoggingIn, isLoggingOut };
+    return { profileUser, profileCodes, targetUserFid, isLoadingProfileData };
 })

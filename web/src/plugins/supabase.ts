@@ -50,6 +50,7 @@ export const useSupabase = async ():Promise<SupabaseConnection> => {
         if (!user && !jwt) {
             // Nothing to do
         } else if (user && !jwt) {
+            await CURRENT_STATE.receiveNeynarUser(user);
             await CURRENT_STATE.connectWithSupabase();
         } else if (!user && jwt) {
             await CURRENT_STATE.clearState();

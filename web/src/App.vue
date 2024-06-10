@@ -14,16 +14,7 @@
         <v-spacer></v-spacer>
 
         <v-responsive max-width="250">
-          <v-text-field
-            label="Search programs..."
-            prepend-inner-icon="mdi-magnify"
-            rounded="lg"
-            variant="solo-filled"
-            density="compact"
-            flat
-            hide-details
-            single-line
-          ></v-text-field>
+          <ProgramAutocomplete v-model="selectedProgram" rounded density="compact" hide-details variant="solo-filled" single-line/>
         </v-responsive>
         <template v-if="currentUser">
           <NewReferralDialog v-model="isCreatingReferral" />
@@ -59,12 +50,11 @@
           </v-menu>
         </template>
         <v-btn
+          v-else
           @click="login()"
           size="large"
-          v-else
           color="#855dcd"
           variant="flat"
-          class="ml-3"
           rounded="lg"
         >
           <v-avatar tile>
@@ -82,12 +72,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import {  useProfileStore, storeToRefs } from "./stores";
+import { ref } from "vue";
+import { useAuthStore, storeToRefs } from "./stores";
 const isCreatingReferral = ref(false);
-const profileStore = useProfileStore();
-const { currentUser } = storeToRefs(profileStore);
-const { login, logout } = profileStore;
+const authStore = useAuthStore();
+const { currentUser } = storeToRefs(authStore);
+const { login, logout } = authStore;
+const selectedProgram = ref<{ title:string, value:string } | null>(null);
+
 </script>
 
 <style>
@@ -99,7 +91,6 @@ const { login, logout } = profileStore;
 .site-title {
   color: white;
   font-size: 40px;
-  font-style: italic
 }
 a {
   text-decoration: none;

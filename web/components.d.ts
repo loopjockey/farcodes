@@ -14,6 +14,7 @@ declare module 'vue' {
     ProgramAutocomplete: typeof import('./src/components/ProgramAutocomplete.vue')['default']
     ProgramControls: typeof import('./src/components/ProgramControls.vue')['default']
     PromotionAd: typeof import('./src/components/PromotionAd.vue')['default']
+    RewardChip: typeof import('./src/components/RewardChip.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TrendingProgramsSlider: typeof import('./src/components/TrendingProgramsSlider.vue')['default']
