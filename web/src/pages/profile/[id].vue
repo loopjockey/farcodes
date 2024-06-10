@@ -6,32 +6,25 @@
       :subtitle="`Joined 2018 • ${profileCodes.length} referral programs`"
       color="background"
     >
+      <template #title>
+        {{ profileUser.name }} • @{{ profileUser.username }}
+      </template>
+      <template #subtitle>
+        <a :href="`https://farcaster.id/${profileUser.username}`"
+          >View Farcaster</a
+        >
+        • Joined 2018
+      </template>
       <template #prepend>
         <v-avatar class="mr-3" size="80">
-          <v-img
-            :src="profileUser.avatarUrl"
-          ></v-img>
+          <v-img :src="profileUser.avatarUrl"></v-img>
         </v-avatar>
       </template>
-      <v-card-actions>
-        <v-btn>
-          <v-avatar rounded="lg" start size="28">
-            <v-img src="../assets/farcaster.svg"></v-img>
-          </v-avatar>
-          Farcaster profile
-        </v-btn>
-        •
-        <v-btn>
-          <v-icon start color="red">mdi-heart</v-icon>
-          Tip Account
-        </v-btn>
-        •
-        <v-btn>
-          <v-icon start color="yellow">mdi-bank</v-icon>
-          See Bags
-        </v-btn>
-      </v-card-actions>
     </v-card>
+
+    <v-tabs>
+      <v-tab>{{ profileCodes.length }} Offers</v-tab>
+    </v-tabs>
 
     <v-row class="mt-3">
       <template v-if="isLoadingProfileData">
@@ -64,10 +57,9 @@
               </v-avatar>
             </template>
             <v-card-actions>
-              <v-chip color="red">
-                <v-icon icon="mdi-wallet" start></v-icon>
+              <RewardChip>
                 {{ c.rewardDescription || c.program.rewardDescription }}
-              </v-chip>
+              </RewardChip>
             </v-card-actions>
           </v-card>
         </v-col>

@@ -19,28 +19,14 @@
             :label="`Code / URL #${i + 1}`"
           >
             <template #append>
-              <v-btn icon variant="text" @click="removeCode(i)">
+              <v-btn icon variant="text" @click="addCode()" v-if="i === codes.length - 1">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+              <v-btn icon variant="text" @click="removeCode(i)" v-else>
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
           </v-text-field>
-
-          <v-btn variant="text" block @click="addCode()" class="mb-4">
-            <v-icon start>mdi-plus</v-icon>
-            Add extra code
-          </v-btn>
-          <v-text-field
-            variant="solo"
-            label="Referral Reward"
-            v-model="referralReward"
-          >
-          </v-text-field>
-          <v-textarea
-            variant="solo"
-            label="Program Description"
-            v-model="referralReward"
-          >
-          </v-textarea>
         </v-form>
       </v-card-text>
       <v-card-actions>

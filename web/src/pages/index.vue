@@ -48,12 +48,9 @@
                   </v-avatar>
                 </template>
                 <template #append>
-                  <v-chip class="ma-2" color="red">
-                    <v-icon icon="mdi-wallet" start></v-icon>
-                    {{
-                      code.rewardDescription || code.program.rewardDescription
-                    }}
-                  </v-chip>
+                  <RewardChip>{{
+                    code.rewardDescription || code.program.rewardDescription
+                  }}</RewardChip>
                 </template>
               </v-list-item>
               <v-divider inset></v-divider>
@@ -79,6 +76,7 @@ import { useDisplay } from "vuetify";
 import PromotionAd from "../components/PromotionAd.vue";
 import { useCodesStore, storeToRefs } from "../stores";
 import { FeedType } from "../models";
+import RewardChip from "../components/RewardChip.vue";
 const { mdAndUp } = useDisplay();
 const isViewingCode = ref(false);
 const codesStore = useCodesStore();

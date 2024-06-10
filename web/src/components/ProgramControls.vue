@@ -8,7 +8,11 @@
   >
     <template v-if="loading">
       <v-slide-group-item v-for="i in 10" :key="i">
-        <v-skeleton-loader type="article" width="280" class="mx-1"></v-skeleton-loader>
+        <v-skeleton-loader
+          type="article"
+          width="280"
+          class="mx-1"
+        ></v-skeleton-loader>
       </v-slide-group-item>
     </template>
     <template v-else>
@@ -21,25 +25,18 @@
         <v-card
           subtitle="Up is a digital bank designed to help you organise your money and simplify your life. Join in minutes and pay no monthly fees."
           target="_blank"
-          title="UpBank"
+          :title="item.name"
           width="280"
           :class="['mx-1', selectedClass]"
           @click="toggle"
         >
           <template #prepend>
             <v-avatar rounded="lg">
-              <v-img
-                src="https://d2xqxjfvpb1oa6.cloudfront.net/eyJidWNrZXQiOiJpbnZpdGF0aW9udXBsb2FkcyIsImtleSI6Imludml0YXRpb24uYXBwLnVwLmNvbS5hdS1wcm9tby1jb2Rlc19lMmJiYWQuYXUiLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjI1NiwiaGVpZ2h0IjoyNTYsImZpdCI6ImNvbnRhaW4iLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9fX0="
-              ></v-img>
+              <v-img :src="item.avatarUrl"></v-img>
             </v-avatar>
           </template>
           <v-card-actions>
-            <v-chip color="red">
-              <v-icon icon="mdi-wallet" start></v-icon>
-              +$10 Reward
-            </v-chip>
-            <v-spacer></v-spacer>
-            <v-btn variant="text"> Go To → </v-btn>
+            <RewardChip>{{ item.rewardDescription }}</RewardChip>
           </v-card-actions>
         </v-card>
       </v-slide-group-item>
@@ -53,3 +50,4 @@ import { ISimpleProgram } from "../models";
 const props = defineProps<{ items: ISimpleProgram[]; loading: Boolean }>();
 const model = defineModel<string[]>();
 </script>
+
