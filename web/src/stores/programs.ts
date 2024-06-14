@@ -1,13 +1,13 @@
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { IProgram, ISimpleCodeModel, IHasCreator, FeedType } from '../models';
+import { IProgram, ISimpleCodeModel, IHasCreator, FeedType, IHasProgram } from '../models';
 import { useSupabase } from '../plugins/supabase';
 import { getProgramById, listCodesForFeed } from '../supabase'
 
 export const useProgramStore = defineStore('program', () => {
     const currentProgramId = ref<string | null>(null);
     const currentProgram = ref<IProgram | null>(null);
-    const currentCodes = ref<(ISimpleCodeModel & IHasCreator)[]>([]);
+    const currentCodes = ref<(ISimpleCodeModel & IHasCreator & IHasProgram)[]>([]);
     const currentFeedType = ref<FeedType>(FeedType.recent);
 
     const isLoadingProgram = ref(false);
@@ -27,7 +27,6 @@ export const useProgramStore = defineStore('program', () => {
 
     const isLoadingFeedCodes = ref(false);
     const tryLoadCodesForCurrentFeed = async (id: string | null) => {
-
         try {
             isLoadingFeedCodes.value = true;
             if (id) {
@@ -46,16 +45,21 @@ export const useProgramStore = defineStore('program', () => {
         tryLoadProgram(id);
     });
 
-    watch(() => [ currentProgramId.value, currentFeedType.value  ], ([ id ]) => {
+    watch(() => [currentProgramId.value, currentFeedType.value], ([id]) => {
         tryLoadCodesForCurrentFeed(id);
-    }, { immediate: true })
+    }, { immediate: true });
+
+    const finalCodes = computed(() => {
+        if (!currentCodes.value?.length) return [];
+        if (!currentProgram.value) return [];
+        return currentCodes.value.map(c => ({ ...c, program: currentProgram.value }));
+    });
 
     return {
         currentProgram,
         currentProgramId,
-        currentCodes,
+        currentCodes: finalCodes,
         currentFeedType,
         isLoadingFeedCodes,
-        currentCodes
     }
 });

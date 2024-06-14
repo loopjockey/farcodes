@@ -1,13 +1,13 @@
 import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { ISimpleFarcasterUser, ISimpleCodeModel, IHasProgram } from '../models';
+import { ISimpleFarcasterUser, ISimpleCodeModel, IHasProgram, IHasCreator } from '../models';
 import { useSupabase } from '../plugins/supabase';
 import { getUserByFid, listCodesForUser } from '../supabase'
 
 export const useProfileStore = defineStore('profile', () => {
     const targetUserFid = ref<number | null>(null);
     const profileUser = ref<ISimpleFarcasterUser | null>(null);
-    const profileCodes = ref<(ISimpleCodeModel & IHasProgram)[]>([]);
+    const profileCodes = ref<(ISimpleCodeModel & IHasCreator & IHasProgram)[]>([]);
 
     const isLoadingProfileData = ref(false);
     const tryLoadProfileData = async (fid: number | null) => {
@@ -23,7 +23,7 @@ export const useProfileStore = defineStore('profile', () => {
                     listCodesForUser(supabase, fid)
                 ])
                 profileUser.value = u;
-                profileCodes.value = c;
+                profileCodes.value = c.map(i => ({...i, creator: u }));
             }
         } finally {
             isLoadingProfileData.value = false;

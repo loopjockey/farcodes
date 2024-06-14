@@ -1,13 +1,11 @@
 import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { ISimpleFarcasterUser, ISimpleCodeModel, ISimpleProgram, IProgram, FeedType, IHasCreator, IHasProgram } from '../models';
+import { ISimpleCodeModel, ISimpleProgram, FeedType, IHasCreator, IHasProgram } from '../models';
 import { useSupabase } from '../plugins/supabase';
 import { listTrendingPrograms, listCodesForFeed } from '../supabase'
 
 export const useCodesStore = defineStore('codes', () => {
     const currentFeedType = ref<FeedType>(FeedType.trending);
-    const userLookup = ref<{ [fid: number]: ISimpleFarcasterUser }>({});
-    const programLookup = ref<{ [pid: string]: ISimpleProgram }>({});
     const currentCodes = ref<(ISimpleCodeModel & IHasCreator & IHasProgram)[]>([]);
     const trendingPrograms = ref<ISimpleProgram[]>([]);
 
@@ -17,14 +15,7 @@ export const useCodesStore = defineStore('codes', () => {
             isLoadingFeedCodes.value = true;
             const supabase = await useSupabase();
             const codes = await listCodesForFeed(supabase, currentFeedType.value);
-            currentCodes.value = [];
-            for (const c of codes) {
-                if (!userLookup.value[c.postedByFid])
-                    userLookup.value[c.postedByFid] = c.creator;
-                if (!programLookup.value[c.programId])
-                    programLookup.value[c.programId] = c.program;
-                currentCodes.value.push(c)
-            }
+            currentCodes.value = codes;
         } finally {
             isLoadingFeedCodes.value = false;
         }
@@ -47,8 +38,6 @@ export const useCodesStore = defineStore('codes', () => {
     }, { immediate: true })
 
     return {
-        userLookup,
-        programLookup,
         currentCodes,
         currentFeedType,
         trendingPrograms,
