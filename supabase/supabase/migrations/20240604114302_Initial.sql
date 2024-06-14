@@ -1,8 +1,10 @@
 CREATE TABLE user_profile (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     fid BIGINT UNIQUE NOT NULL,
-    custody_address VARCHAR NOT NULL,
+    username VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
+    custody_address VARCHAR NOT NULL,
+    avatar_url VARCHAR NOT NULL,
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT current_timestamp,
     updated_at TIMESTAMP DEFAULT current_timestamp
@@ -21,7 +23,8 @@ CREATE TABLE social_graph (
 CREATE TABLE programs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR NOT NULL,
-    description TEXT,
+    description VARCHAR,
+    reward_description VARCHAR,
     logo_url VARCHAR,
     site_url VARCHAR,
     trend INT DEFAULT 0,
@@ -34,12 +37,14 @@ CREATE TABLE programs (
 CREATE TABLE referrals (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     program_id UUID REFERENCES programs(id),
-    code VARCHAR NOT NULL,
+    codes VARCHAR[] NOT NULL,
+    reward_description VARCHAR,
     weight INT DEFAULT 0,
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT current_timestamp,
     updated_at TIMESTAMP DEFAULT current_timestamp,
-    created_by UUID REFERENCES auth.users(id)
+    created_by UUID REFERENCES auth.users(id),
+    created_by_fid BIGINT NOT NULL REFERENCES user_profile(fid)
 );
 
 CREATE TABLE daily_tracking (
@@ -101,8 +106,7 @@ CREATE POLICY "programs_select" ON programs
 
 CREATE POLICY "programs_insert" ON programs
     FOR INSERT
-    TO authenticated
-    WITH CHECK (auth.uid() = created_by);
+    WITH CHECK (false);
 
 CREATE POLICY "programs_update" ON programs
     FOR UPDATE
@@ -127,10 +131,12 @@ CREATE POLICY "referrals_update" ON referrals
     TO authenticated
     USING (auth.uid() = created_by)
     WITH CHECK (
+        id IS NOT DISTINCT FROM referrals.id AND
         program_id IS NOT DISTINCT FROM referrals.program_id AND
         weight IS NOT DISTINCT FROM referrals.weight AND
         created_at IS NOT DISTINCT FROM referrals.created_at AND
         created_by IS NOT DISTINCT FROM referrals.created_by AND
+        created_by_fid IS NOT DISTINCT FROM referrals.created_by_fid AND
         updated_at IS NOT DISTINCT FROM referrals.updated_at
     );
 
@@ -210,6 +216,19 @@ CREATE TRIGGER referrals_insert_trigger
 BEFORE INSERT ON referrals
 FOR EACH ROW
 EXECUTE FUNCTION check_referrals_insert();
+
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = current_timestamp;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_referrals_updated_at
+AFTER INSERT ON referrals
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at();
 
 -- FUNCTIONS
 

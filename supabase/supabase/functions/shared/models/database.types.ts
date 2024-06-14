@@ -34,13 +34,248 @@ export interface Database {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      daily_tracking: {
+        Row: {
+          click: number | null
+          copy: number | null
+          created_at: string | null
+          date: string
+          id: string
+          referral_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          click?: number | null
+          copy?: number | null
+          created_at?: string | null
+          date: string
+          id?: string
+          referral_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          click?: number | null
+          copy?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          referral_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_tracking_referral_id_fkey"
+            columns: ["referral_id"]
+            isOneToOne: false
+            referencedRelation: "referrals"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      programs: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_deleted: boolean | null
+          logo_url: string | null
+          name: string
+          reward_description: string | null
+          site_url: string | null
+          trend: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_deleted?: boolean | null
+          logo_url?: string | null
+          name: string
+          reward_description?: string | null
+          site_url?: string | null
+          trend?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_deleted?: boolean | null
+          logo_url?: string | null
+          name?: string
+          reward_description?: string | null
+          site_url?: string | null
+          trend?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "programs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      referrals: {
+        Row: {
+          codes: string[]
+          created_at: string | null
+          created_by: string | null
+          created_by_fid: number
+          id: string
+          is_deleted: boolean | null
+          program_id: string | null
+          reward_description: string | null
+          updated_at: string | null
+          weight: number | null
+        }
+        Insert: {
+          codes: string[]
+          created_at?: string | null
+          created_by?: string | null
+          created_by_fid: number
+          id?: string
+          is_deleted?: boolean | null
+          program_id?: string | null
+          reward_description?: string | null
+          updated_at?: string | null
+          weight?: number | null
+        }
+        Update: {
+          codes?: string[]
+          created_at?: string | null
+          created_by?: string | null
+          created_by_fid?: number
+          id?: string
+          is_deleted?: boolean | null
+          program_id?: string | null
+          reward_description?: string | null
+          updated_at?: string | null
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_created_by_fid_fkey"
+            columns: ["created_by_fid"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["fid"]
+          },
+          {
+            foreignKeyName: "referrals_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      social_graph: {
+        Row: {
+          created_at: string | null
+          followee_fid: number
+          follower_fid: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          followee_fid: number
+          follower_fid: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          followee_fid?: number
+          follower_fid?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_followee_fid"
+            columns: ["followee_fid"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["fid"]
+          },
+          {
+            foreignKeyName: "fk_follower_fid"
+            columns: ["follower_fid"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["fid"]
+          }
+        ]
+      }
+      user_profile: {
+        Row: {
+          avatar_url: string
+          created_at: string | null
+          custody_address: string
+          fid: number
+          id: string
+          is_deleted: boolean | null
+          name: string
+          updated_at: string | null
+          username: string
+        }
+        Insert: {
+          avatar_url: string
+          created_at?: string | null
+          custody_address: string
+          fid: number
+          id: string
+          is_deleted?: boolean | null
+          name: string
+          updated_at?: string | null
+          username: string
+        }
+        Update: {
+          avatar_url?: string
+          created_at?: string | null
+          custody_address?: string
+          fid?: number
+          id?: string
+          is_deleted?: boolean | null
+          name?: string
+          updated_at?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profile_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      recalc_referral_weight: {
+        Args: {
+          referral_id: string
+          copy_delta: number
+          click_delta: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
