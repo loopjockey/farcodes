@@ -1,9 +1,19 @@
 <template>
-  <v-chip color="red" class="reward-chip text-center" rounded="lg">
+  <v-chip :color="color" class="reward-chip text-center" rounded="lg">
     <v-icon icon="mdi-wallet" start></v-icon>
     <slot></slot>
   </v-chip>
 </template>
+
+<script lang="ts" setup>
+import { defineProps } from 'vue';
+defineProps({
+  color: {
+    type: String,
+    default: "red"
+  }
+})
+</script>
 
 <style scoped>
 .reward-chip {

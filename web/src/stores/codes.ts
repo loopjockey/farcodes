@@ -9,7 +9,7 @@ export const useCodesStore = defineStore('codes', () => {
     const userLookup = ref<{ [fid: number]: ISimpleFarcasterUser }>({});
     const programLookup = ref<{ [pid: string]: ISimpleProgram }>({});
     const currentCodes = ref<(ISimpleCodeModel & IHasCreator & IHasProgram)[]>([]);
-    const trendingPrograms = ref<IProgram[]>([]);
+    const trendingPrograms = ref<ISimpleProgram[]>([]);
 
     const isLoadingFeedCodes = ref(false);
     const tryLoadCodesForCurrentFeed = async () => {

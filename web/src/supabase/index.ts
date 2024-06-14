@@ -8,11 +8,19 @@ export const loginWithSigner = async (signerUuid: string): Promise<Jwt> => Promi
 
 export const createCli = (jwt: Jwt): ICli => ({});
 
-export const getUserByFid = async (cli: ICli, fid:number) => {
+export const getUserByFid = async (cli: ICli, fid: number) => {
     return {
         ...DUMMY_USER,
         fid
     }
+}
+
+export const getProgramById = async (cli: ICli, id: string) => {
+    return await new Promise<IProgram>((resolve) => {
+        setTimeout(() => {
+            resolve({ ...DUMMY_PROGRAM, rewardConditions: 'You must do a backflip' });
+        }, 2000);
+    });
 }
 
 export const searchPrograms = async (cli: ICli, text: string) => {
@@ -24,14 +32,21 @@ export const searchPrograms = async (cli: ICli, text: string) => {
 }
 
 export const listTrendingPrograms = async (cli: ICli) => {
-    return await new Promise<IProgram[]>((resolve) => {
+    return await new Promise<ISimpleProgram[]>((resolve) => {
         setTimeout(() => {
             resolve(DUMMY_TRENDING_PROGRAMS);
         }, 2000);
     });
 };
 
-export const listCodesForFeed = async (cli: ICli, feedType: FeedType) => {
+/**
+ * Loads the codes for a given feed type, with optional filters
+ * @param cli The supabase cli.
+ * @param feedType The type of feed to load on
+ * @param filters The optional filters to apply to a feed request 
+ * @returns 
+ */
+export const listCodesForFeed = async (cli: ICli, feedType: FeedType, filters?: { programIds?: string[] }) => {
     return await new Promise<(ISimpleCodeModel & IHasCreator & IHasProgram)[]>((resolve) => {
         setTimeout(() => {
             resolve(

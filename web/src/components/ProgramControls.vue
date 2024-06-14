@@ -19,35 +19,39 @@
       <v-slide-group-item
         v-for="item in props.items || []"
         :key="item.id"
-        v-slot="{ toggle, selectedClass }"
+        v-slot="{ isSelected, toggle }"
         :value="item.id"
+        color="red"
       >
-        <v-card
-          subtitle="Up is a digital bank designed to help you organise your money and simplify your life. Join in minutes and pay no monthly fees."
-          target="_blank"
-          :title="item.name"
-          width="280"
-          :class="['mx-1', selectedClass]"
+        <ProgramCard
           @click="toggle"
+          :reward-description="item.rewardDescription"
+          :program-avatar-url="item.avatarUrl"
+          :program-name="item.name"
+          :class="['mx-1', isSelected ? 'selected-custom' : undefined]"
+          :width="280"
         >
-          <template #prepend>
-            <v-avatar rounded="lg">
-              <v-img :src="item.avatarUrl"></v-img>
-            </v-avatar>
+          <template #append>
+            <v-checkbox :model-value="isSelected" hide-details></v-checkbox>
           </template>
-          <v-card-actions>
-            <RewardChip>{{ item.rewardDescription }}</RewardChip>
-          </v-card-actions>
-        </v-card>
+        </ProgramCard>
       </v-slide-group-item>
     </template>
   </v-slide-group>
 </template>
 
 <script lang="ts" setup>
-import { ref, defineModel, defineProps } from "vue";
+import { defineModel, defineProps } from "vue";
 import { ISimpleProgram } from "../models";
 const props = defineProps<{ items: ISimpleProgram[]; loading: Boolean }>();
 const model = defineModel<string[]>();
 </script>
 
+<style scoped>
+.selected-custom {
+  border: rgb(122, 93, 122) 1px solid;
+  box-shadow: 0 5px 5px -3px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
+    0 8px 10px 1px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
+    0 3px 14px 2px var(--v-shadow-key-ambient-opacity, rgb(150 83 83 / 39%)) !important;
+}
+</style>

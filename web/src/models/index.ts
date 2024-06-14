@@ -21,6 +21,8 @@ export interface ISimpleProgram {
     name: string;
     avatarUrl: string;
     rewardDescription: string;
+    description: string;
+    tags: string[];
 }
 
 export interface IHasProgram {
@@ -28,7 +30,6 @@ export interface IHasProgram {
 }
 
 export interface IProgram extends ISimpleProgram {
-    description: string;
     rewardConditions: string;
 }
 

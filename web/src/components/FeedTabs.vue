@@ -1,11 +1,15 @@
 <template>
-  <v-tabs class="mb-3" v-if="type === 'tabs'">
+  <v-tabs
+    class="mb-3"
+    :direction="direction"
+    :align-tabs="direction === 'horizontal' ? 'center' : undefined"
+  >
     <v-tab v-for="n in feedTypes" :key="n.id" @click="model = n.id">
       <v-icon start>{{ n.icon }}</v-icon>
       {{ n.name }}
     </v-tab>
   </v-tabs>
-  <v-list rounded="lg" v-else>
+  <!--<v-list rounded="lg" v-else>
     <v-list-subheader> Feeds </v-list-subheader>
     <v-list-item
       v-for="n in feedTypes"
@@ -24,14 +28,14 @@
       link
       prepend-icon="mdi-refresh"
     ></v-list-item>
-  </v-list>
+  </v-list>-->
 </template>
 
 <script lang="ts" setup>
 import { defineProps, defineModel, ref } from "vue";
 import { FeedType } from "../models/index";
 
-defineProps<{ type: "tabs" | "list" }>();
+defineProps<{ direction: "vertical" | "horizontal" }>();
 const model = defineModel<FeedType>();
 
 const feedTypes = ref([
