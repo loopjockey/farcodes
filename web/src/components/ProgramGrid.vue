@@ -19,7 +19,19 @@
           :program-avatar-url="c.program.avatarUrl"
           :program-description="c.program.description"
           :program-name="c.program.name"
-        />
+        >
+          <template #actions>
+            <v-btn variant="tonal" color="success"
+              >Visibility: {{ c.visibility }}
+              <v-icon end>mdi-trending-up</v-icon></v-btn
+            >
+            <v-spacer></v-spacer>
+            <v-btn>
+              <v-icon start>mdi-eye</v-icon>
+              {{ c.viewCount }} Views</v-btn
+            >
+          </template>
+        </ProgramCard>
       </v-col>
     </template>
   </v-row>
@@ -28,10 +40,10 @@
 
 <script lang="ts" setup>
 import { defineProps, ref } from "vue";
-import { ISimpleCodeModel } from "../models";
+import { ISimpleCodeModel, IHasProgram, IHasVisibilityStats } from "../models";
 
 defineProps({
-  items: Array<ISimpleCodeModel>,
+  items: Array<ISimpleCodeModel & IHasProgram & IHasVisibilityStats>,
   loading: Boolean,
 });
 

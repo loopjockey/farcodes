@@ -35,12 +35,6 @@
               >
               </v-list-item>
               <v-list-item
-                prepend-icon="mdi-chart-areaspline"
-                title="Analytics"
-              >
-              </v-list-item>
-
-              <v-list-item
                 prepend-icon="mdi-logout"
                 title="Logout"
                 @click="logout()"

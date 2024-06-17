@@ -16,6 +16,11 @@ export interface IHasCreator {
     creator: ISimpleFarcasterUser;
 }
 
+export interface IHasVisibilityStats {
+    visibility: 'high' | 'medium' | 'low';
+    viewCount: number;
+}
+
 export interface ISimpleProgram {
     id: string;
     name: string;

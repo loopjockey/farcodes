@@ -27,14 +27,6 @@
         <v-icon start>mdi-tag</v-icon>
         {{ profileCodes.length }} Programs</v-tab
       >
-      <v-tab>
-        <v-icon start>mdi-heart</v-icon>
-        Mutuals</v-tab
-      >
-      <v-tab>
-        <v-icon start>mdi-account-multiple</v-icon>
-        Following</v-tab
-      >
     </v-tabs>
 
     <ProgramGrid :loading="isLoadingProfileData" :items="profileCodes" />

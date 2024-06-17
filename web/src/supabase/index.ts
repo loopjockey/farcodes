@@ -1,4 +1,4 @@
-import { FeedType, IHasCreator, IHasProgram, IProgram, ISimpleCodeModel, ISimpleFarcasterUser, ISimpleProgram } from '../models';
+import { FeedType, IHasCreator, IHasProgram, IProgram, ISimpleCodeModel, ISimpleFarcasterUser, ISimpleProgram, IHasVisibilityStats } from '../models';
 import { DUMMY_CODES, DUMMY_PROGRAM, DUMMY_TRENDING_PROGRAMS, DUMMY_USER } from '../models/dummy';
 
 export type Jwt = string;
@@ -61,12 +61,14 @@ export const listCodesForFeed = async (cli: ICli, feedType: FeedType, filters?: 
 }
 
 export const listCodesForUser = async (cli: ICli, fid: number) => {
-    return await new Promise<(ISimpleCodeModel & IHasProgram)[]>((resolve) => {
+    return await new Promise<(ISimpleCodeModel & IHasProgram & IHasVisibilityStats)[]>((resolve) => {
         setTimeout(() => {
             resolve(
                 DUMMY_CODES.map(d => ({
                     ...d,
-                    program: DUMMY_PROGRAM
+                    program: DUMMY_PROGRAM,
+                    visibility: 'high',
+                    viewCount: 1000
                 }))
             )
         }, 1000);

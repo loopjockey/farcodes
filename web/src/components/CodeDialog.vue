@@ -29,6 +29,9 @@
         </v-btn>
       </template>
       <v-card-text class="pb-0">
+        <v-alert type="success" variant="tonal">
+          Upon completion of the referral <a href class="text-decoration-underline text-success">conditions</a> you will receive: AUD$330 discount
+        </v-alert>
         <v-list>
           <v-list-item v-for="i in 5" :key="i">
             <template #prepend> {{ i }}. &nbsp;&nbsp;&nbsp; </template>
