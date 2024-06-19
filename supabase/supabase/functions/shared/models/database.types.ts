@@ -88,6 +88,7 @@ export type Database = {
           is_deleted: boolean | null
           logo_url: string | null
           name: string
+          referrer_bonus_description: string | null
           reward_description: string | null
           site_url: string | null
           tags: string[] | null
@@ -102,6 +103,7 @@ export type Database = {
           is_deleted?: boolean | null
           logo_url?: string | null
           name: string
+          referrer_bonus_description?: string | null
           reward_description?: string | null
           site_url?: string | null
           tags?: string[] | null
@@ -116,6 +118,7 @@ export type Database = {
           is_deleted?: boolean | null
           logo_url?: string | null
           name?: string
+          referrer_bonus_description?: string | null
           reward_description?: string | null
           site_url?: string | null
           tags?: string[] | null

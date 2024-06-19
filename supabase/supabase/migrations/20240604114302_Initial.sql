@@ -25,6 +25,7 @@ CREATE TABLE programs (
     name VARCHAR NOT NULL,
     description VARCHAR,
     reward_description VARCHAR,
+    referrer_bonus_description VARCHAR,
     logo_url VARCHAR,
     site_url VARCHAR,
     trend INT DEFAULT 0,
@@ -45,7 +46,8 @@ CREATE TABLE referrals (
     created_at TIMESTAMP DEFAULT current_timestamp,
     updated_at TIMESTAMP DEFAULT current_timestamp,
     created_by UUID REFERENCES auth.users(id),
-    created_by_fid BIGINT NOT NULL REFERENCES user_profile(fid)
+    created_by_fid BIGINT NOT NULL REFERENCES user_profile(fid),
+    UNIQUE (program_id, created_by_fid)
 );
 
 CREATE TABLE daily_tracking (
