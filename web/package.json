@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "6.2.95",
+    "@supabase/supabase-js": "^2.43.5",
     "core-js": "^3.34.0",
     "idb-keyval": "^6.2.1",
     "pinia": "^2.1.7",

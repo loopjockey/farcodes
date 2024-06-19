@@ -6,7 +6,7 @@ import * as auth from "./routes/auth.ts";
 const pogo = create('api')
   .withCors('*', 'authorization, x-client-info, apikey, Content-Type');
 
-pogo.router.post("sign-in", auth.SignIn);
+pogo.router.post("auth/sign-in", auth.SignIn);
 
 serve(async (req: Request) => {
   return await pogo.handle(req);
