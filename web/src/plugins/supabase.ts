@@ -22,7 +22,7 @@ export class SupabaseConnection {
     }
     async connectWithSupabase() {
         const jwt = await loginWithSigner(this.currentUser!.signer_uuid);
-        await this.receiveJwt(jwt);
+        await this.receiveJwt(jwt.jwt);
     }
     async clearState() {
         this.currentUser = null;

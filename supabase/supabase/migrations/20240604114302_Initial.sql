@@ -25,13 +25,15 @@ CREATE TABLE programs (
     name VARCHAR NOT NULL,
     description VARCHAR,
     reward_description VARCHAR,
+    referrer_bonus_description VARCHAR,
     logo_url VARCHAR,
     site_url VARCHAR,
     trend INT DEFAULT 0,
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT current_timestamp,
     updated_at TIMESTAMP DEFAULT current_timestamp,
-    created_by UUID REFERENCES auth.users(id)
+    created_by UUID REFERENCES auth.users(id),
+    tags TEXT[]
 );
 
 CREATE TABLE referrals (
@@ -44,7 +46,8 @@ CREATE TABLE referrals (
     created_at TIMESTAMP DEFAULT current_timestamp,
     updated_at TIMESTAMP DEFAULT current_timestamp,
     created_by UUID REFERENCES auth.users(id),
-    created_by_fid BIGINT NOT NULL REFERENCES user_profile(fid)
+    created_by_fid BIGINT NOT NULL REFERENCES user_profile(fid),
+    UNIQUE (program_id, created_by_fid)
 );
 
 CREATE TABLE daily_tracking (
@@ -152,22 +155,6 @@ CREATE POLICY "daily_tracking_select" ON daily_tracking
 
 CREATE OR REPLACE FUNCTION check_programs_insert() RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.id IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for id';
-    END IF;
-    IF NEW.trend IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for trend';
-    END IF;
-    IF NEW.created_at IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for created_at';
-    END IF;
-    IF NEW.updated_at IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for updated_at';
-    END IF;
-    IF NEW.is_deleted IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for is_deleted';
-    END IF;
-
     NEW.id := uuid_generate_v4();
     NEW.trend := 0;
     NEW.is_deleted := false;
@@ -185,23 +172,6 @@ EXECUTE FUNCTION check_programs_insert();
 
 CREATE OR REPLACE FUNCTION check_referrals_insert() RETURNS TRIGGER AS $$
 BEGIN
-    -- Ensure fields are set to their defaults if not provided
-    IF NEW.id IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for id';
-    END IF;
-    IF NEW.created_at IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for created_at';
-    END IF;
-    IF NEW.updated_at IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for updated_at';
-    END IF;
-    IF NEW.weight IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for weight';
-    END IF;
-    IF NEW.is_deleted IS NOT NULL THEN
-        RAISE EXCEPTION 'Cannot insert value for is_deleted';
-    END IF;
-
     NEW.id := uuid_generate_v4();
     NEW.weight := 0;
     NEW.is_deleted := false;
@@ -265,3 +235,25 @@ BEGIN
     PERFORM recalc_referral_weight(referral_id, copy_delta, click_delta);
 END;
 $$;
+
+-- VIEWS
+
+CREATE VIEW vw_referrals_with_programs AS
+SELECT
+    r.id AS referral_id,
+    r.created_by_fid AS referral_created_by_fid,
+    r.program_id,
+    array_length(r.codes, 1) AS referral_code_count,
+    r.reward_description AS referral_reward_description,
+    p.name AS program_name,
+    p.logo_url AS program_logo_url,
+    p.reward_description AS program_reward_description,
+    p.description AS program_description,
+    p.tags AS program_tags
+FROM
+    referrals r
+JOIN
+    programs p ON r.program_id = p.id
+WHERE
+    r.is_deleted = FALSE
+    AND p.is_deleted = FALSE;

@@ -19,8 +19,8 @@ export const useProfileStore = defineStore('profile', () => {
             } else {
                 const supabase = await useSupabase();
                 const [u, c] = await Promise.all([
-                    getUserByFid(supabase, fid),
-                    listCodesForUser(supabase, fid)
+                    getUserByFid(supabase.supabaseCli!, fid),
+                    listCodesForUser(supabase.supabaseCli!, fid)
                 ])
                 profileUser.value = u;
                 profileCodes.value = c.map(i => ({ ...i, creator: u }));
