@@ -21,7 +21,7 @@
         :key="item.id"
         v-slot="{ isSelected, toggle }"
         :value="item.id"
-        color="red"
+        color="primary"
       >
         <ProgramCard
           @click="toggle"

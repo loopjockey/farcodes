@@ -10,7 +10,7 @@ import { defineProps } from 'vue';
 defineProps({
   color: {
     type: String,
-    default: "red"
+    default: "primary"
   }
 })
 </script>

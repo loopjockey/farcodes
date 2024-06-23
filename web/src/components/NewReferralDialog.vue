@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="model" scrollable max-width="600">
     <template #activator="{ props }">
-      <v-btn color="red" variant="tonal" v-bind="props">
+      <v-btn class="ml-2" color="primary" variant="flat" v-bind="props">
         <v-icon start>mdi-plus</v-icon>
         New Code
       </v-btn>

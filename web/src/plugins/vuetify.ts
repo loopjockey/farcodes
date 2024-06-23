@@ -27,14 +27,14 @@ export default createVuetify({
         colors: {
           background: '#09060c',
           surface: '#17101e',
-          primary: '#452d8f'
+          primary: '#ff4f00'
         }
       },
       'light': {
         colors: {
           background: '#f8fafc',
           surface: '#fff',
-          primary: '#452d8f'
+          primary: '#ff4f00'
         }
       }
     }

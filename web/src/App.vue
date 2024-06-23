@@ -8,8 +8,8 @@
           FAR . CODES
         </router-link>
 
-        <router-link to="/" class="ml-8"> Home </router-link>
-        <router-link to="/about" class="ml-8"> About </router-link>
+        <router-link to="/" class="ml-8 text-primary"> Home </router-link>
+        <router-link to="/about" class="ml-8 text-primary"> About </router-link>
 
         <v-spacer></v-spacer>
 
