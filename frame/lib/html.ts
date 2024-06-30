@@ -21,7 +21,7 @@ enum ElementType {
     RT = "rt", RTC = "rtc", RUBY = "ruby", S = "s", SAMP = "samp", SCRIPT = "script", SECTION = "section", SELECT = "select", SLOT = "slot", SMALL = "small",
     SOURCE = "source", SPAN = "span", STRONG = "strong", STYLE = "style", SUB = "sub", SUMMARY = "summary", SUP = "sup", SVG = "svg", TABLE = "table",
     TBODY = "tbody", TD = "td", TEMPLATE = "template", TEXTAREA = "textarea", TFOOT = "tfoot", TH = "th", THEAD = "thead", TIME = "time", TITLE = "title",
-    TR = "tr", TRACK = "track", U = "u", UL = "ul", VAR = "var", VIDEO = "video", WBR = "wbr"
+    TR = "tr", TRACK = "track", U = "u", UL = "ul", VAR = "var", VIDEO = "video", WBR = "wbr", PATH = "path", G = "g"
 }
 
 const elementFunctions: { [key in ElementType]: (props: any, ...children: any[]) => any } = {} as any;
