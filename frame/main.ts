@@ -8,7 +8,13 @@ const app = new Hono();
 
 app.get("/", async () => {
   const svg = await html2svg(
-    baseView()
+    baseView({
+      programName: "Uber Eats".toUpperCase(),
+      programDescription: "Uber Eats is an American online food ordering and delivery platform launched by Uber.",
+      programAvatarUrl: "https://logodownload.org/wp-content/uploads/2019/05/uber-eats-logo-1.png",
+      refereeBonus: "$10",
+      referrerBonus: "$10",
+    }),
   );
   return new Response(svg, { headers: { "Content-Type": "image/svg+xml" } });
 });
