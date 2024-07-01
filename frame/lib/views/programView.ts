@@ -1,7 +1,7 @@
-import tags from "./html.ts";
-const { div, svg, g, path, span, img } = tags;
+import tags from "../html.ts";
+const { div, span, img } = tags;
 
-export const baseView = (
+export const programView = (
     p: {
         programName: string;
         programDescription: string;
@@ -66,6 +66,7 @@ export const baseView = (
                         display: "flex",
                         fontSize: "38px",
                         fontWeight: "bold",
+                        color: "#FF4F00"
                     },
                 }, programName),
                 div(

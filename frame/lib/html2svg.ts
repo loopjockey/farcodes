@@ -1,9 +1,6 @@
 import satori from "npm:satori";
 import { ReactNode } from 'npm:react'
-
-const fetchRobotoFont = fetch(
-    "https://f005.backblazeb2.com/file/farcodes/Roboto-Regular.ttf",
-  ).then((r) => r.arrayBuffer());
+import { getRobotoFont } from './fonts.ts';
 
 export default async (html: ReactNode) => {
     return await satori(
@@ -14,11 +11,11 @@ export default async (html: ReactNode) => {
             fonts: [
                 {
                     name: "Roboto",
-                    data: await fetchRobotoFont,
+                    data: await getRobotoFont(),
                     weight: 400,
                     style: "normal",
                 },
-            ],
+            ]
         },
     );
 };
